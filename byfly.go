@@ -24,9 +24,10 @@ type Byfly struct {
 }
 
 type ByflyArgs struct {
-	login    string
-	password string
-	config   string
+	login       string
+	password    string
+	config      string
+	onlyBalance bool
 }
 
 type Config struct {
@@ -37,9 +38,10 @@ type Config struct {
 func prepareArgs() ByflyArgs {
 	loginPtr := flag.String("l", "", "byfly login")
 	passwordPtr := flag.String("p", "", "byfly password")
-	conficPtr := flag.String("f", "", "config file")
+	configPtr := flag.String("f", "", "config file")
+	onlyBalancPtr := flag.Bool("b", false, "show only balance")
 	flag.Parse()
-	return ByflyArgs{*loginPtr, *passwordPtr, *conficPtr}
+	return ByflyArgs{*loginPtr, *passwordPtr, *configPtr, *onlyBalancPtr}
 }
 
 func getUserHome() (string, error) {
@@ -90,7 +92,7 @@ func readConfigs(filename string) ByflyArgs {
 		argsConfig, _ := filepath.Abs(filename)
 		configs = append(configs, argsConfig)
 	}
-	args := ByflyArgs{"", "", ""}
+	args := ByflyArgs{"", "", "", false}
 	for _, name := range configs {
 		args = readConfig(args, name)
 	}
@@ -143,7 +145,11 @@ func (byfly *Byfly) getPage() (string, error) {
 	return readBody(resp)
 }
 
-func (byfly *Byfly) printResult() {
+func (byfly *Byfly) printResult(onlyBalance bool) {
+	if onlyBalance {
+		fmt.Println(strconv.Itoa(byfly.balance))
+		return
+	}
 	data := [][]string{
 		{"Абонент", byfly.client},
 		{"Логин", byfly.login},
@@ -194,5 +200,5 @@ func main() {
 		fmt.Println(err)
 		os.Exit(-1)
 	}
-	byfly.printResult()
+	byfly.printResult(args.onlyBalance)
 }
