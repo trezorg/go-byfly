@@ -9,13 +9,12 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
-	"strconv"
 	"strings"
 	"unicode/utf8"
 )
 
 type Byfly struct {
-	balance  int
+	balance  float64
 	password string
 	client   string
 	login    string
@@ -38,7 +37,10 @@ type Config struct {
 func prepareArgs() ByflyArgs {
 	loginPtr := flag.String("l", "", "byfly login")
 	passwordPtr := flag.String("p", "", "byfly password")
-	configPtr := flag.String("f", "", "config file")
+	configPtr := flag.String("f", "", `config file
+        Example:
+        login = 1111
+        password = 1111`)
 	onlyBalancPtr := flag.Bool("b", false, "show only balance")
 	flag.Parse()
 	return ByflyArgs{*loginPtr, *passwordPtr, *configPtr, *onlyBalancPtr}
@@ -147,13 +149,13 @@ func (byfly *Byfly) getPage() (string, error) {
 
 func (byfly *Byfly) printResult(onlyBalance bool) {
 	if onlyBalance {
-		fmt.Println(strconv.Itoa(byfly.balance))
+		fmt.Println(byfly.balance)
 		return
 	}
 	data := [][]string{
 		{"Абонент", byfly.client},
 		{"Логин", byfly.login},
-		{"Баланс", strconv.Itoa(byfly.balance)},
+		{"Баланс", fmt.Sprintf("%.2f", byfly.balance)},
 		{"Тариф", byfly.tariff},
 		{"Статус", byfly.status},
 	}
