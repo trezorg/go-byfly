@@ -16,8 +16,8 @@ func getBalance(doc *goquery.Document) (float64, error) {
 		return 0, fmt.Errorf(
 			"Cannot get byfly data. Check login and password, try again within 10 minutes.")
 	}
-    balance, err := strconv.ParseFloat(cleanStr, 64)
-    if (err) != nil {
+	balance, err := strconv.ParseFloat(cleanStr, 64)
+	if (err) != nil {
 		return 0, fmt.Errorf(
 			"Cannot get byfly data. Cannot parse balance value: %s.", cleanStr)
 	}

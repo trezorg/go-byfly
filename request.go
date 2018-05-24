@@ -2,8 +2,8 @@ package main
 
 import (
 	"bytes"
-	"code.google.com/p/go.net/publicsuffix"
 	"fmt"
+	"golang.org/x/net/publicsuffix"
 	"io/ioutil"
 	"log"
 	"net/http"

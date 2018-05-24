@@ -10,7 +10,7 @@ var agentHeaders = http.Header{
 }
 
 const (
-	urlLogin           = "https://issa.beltelecom.by/main.html"
+	urlLogin           = "https://issaold.beltelecom.by/main.html"
 	passwordFieldName  = "passwd"
 	loginFieldName     = "oper_user"
 	redirectFieldName  = "redirect"
